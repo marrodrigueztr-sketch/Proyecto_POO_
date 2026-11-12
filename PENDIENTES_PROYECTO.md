@@ -19,7 +19,6 @@ Fuente de requisitos: `ProyectoPOO2026II-Grupo1.docx`. Los formularios se crean 
 
 ## Entrega 3 (final): falta
 - [ ] **Persistencia**: guardar y cargar todas las listas en archivos (por ejemplo, serialización o CSV) o en una base de datos. Cargar al iniciar y guardar en cada operación CRUD.
-- [ ] **Herencia en productos**: crear subclases (por ejemplo, `ProductoPerecedero` con fecha de caducidad). Hoy `Productos` usa `String tipo` y no tiene herencia.
 - [ ] **Validaciones con Regex y excepciones propias** (lanzar una excepción si no se cumplen):
   - Correo con formato corporativo.
   - Fecha `DD/MM/AAAA`.
@@ -29,6 +28,9 @@ Fuente de requisitos: `ProyectoPOO2026II-Grupo1.docx`. Los formularios se crean 
 - [ ] CRUD de usuarios desde el panel del Administrador. Las contraseñas se muestran ocultas.
 - [ ] Javadoc (HTML) de todas las clases, métodos y constructores.
 - [ ] Ejecutable o acceso directo en el escritorio (el `.jar` de `dist/` más un script). Además, PDF de documentación y video.
+
+## Decisiones tomadas
+- **Productos sin herencia**: la profesora confirmó que no es necesaria. Se usa `String tipo` (Perecedero/Frágil/Electrónico) elegido en un combo. La herencia del proyecto se demuestra con `Usuarios` → `AdministradorSistema`, `GerenteGeneral` y `OperarioBodega`. **No proponer subclases de Productos.**
 
 ## Detalles a corregir
 - `Usuarios` no sobrescribe `toString()`, así que las subclases muestran `MODELO.X@hash`.
