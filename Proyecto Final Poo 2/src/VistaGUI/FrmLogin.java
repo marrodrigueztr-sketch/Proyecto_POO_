@@ -4,13 +4,22 @@
  */
 package VistaGUI;
 
+import CONTROLADOR.ControladorUsuario;
+import MODELO.Usuarios;
+import javax.swing.JOptionPane;
+
 /**
+ * Ventana de inicio de sesión del ERP. Autentica al usuario por correo y
+ * contraseña y abre el menú principal según su rol.
  *
  * @author Marcelo
  */
 public class FrmLogin extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmLogin.class.getName());
+
+    /** Estructura básica de un correo: texto@dominio.ext */
+    private static final String REGEX_CORREO = "^[\\w.+-]+@[\\w-]+(\\.[\\w-]+)*\\.[A-Za-z]{2,}$";
 
     /**
      * Creates new form FrmLogin
@@ -28,21 +37,127 @@ public class FrmLogin extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lblTitulo = new javax.swing.JLabel();
+        lblCorreo = new javax.swing.JLabel();
+        txtCorreo = new javax.swing.JTextField();
+        lblContrasena = new javax.swing.JLabel();
+        txtContrasena = new javax.swing.JPasswordField();
+        btnIniciarSesion = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("ERP Corporativo - Inicio de sesión");
+        setResizable(false);
+
+        lblTitulo.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        lblTitulo.setForeground(new java.awt.Color(0, 153, 204));
+        lblTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitulo.setText("Iniciar Sesión");
+
+        lblCorreo.setForeground(new java.awt.Color(0, 153, 204));
+        lblCorreo.setText("Correo");
+
+        txtCorreo.addActionListener(this::txtCorreoActionPerformed);
+
+        lblContrasena.setForeground(new java.awt.Color(0, 153, 204));
+        lblContrasena.setText("Contraseña");
+
+        txtContrasena.setEchoChar('*');
+        txtContrasena.addActionListener(this::txtContrasenaActionPerformed);
+
+        btnIniciarSesion.setForeground(new java.awt.Color(0, 153, 204));
+        btnIniciarSesion.setText("Iniciar Sesión");
+        btnIniciarSesion.addActionListener(this::btnIniciarSesionActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(60, 60, 60)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblCorreo)
+                    .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblContrasena)
+                    .addComponent(txtContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnIniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(lblTitulo)
+                .addGap(30, 30, 30)
+                .addComponent(lblCorreo)
+                .addGap(6, 6, 6)
+                .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblContrasena)
+                .addGap(6, 6, 6)
+                .addComponent(txtContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
+                .addComponent(btnIniciarSesion, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtCorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCorreoActionPerformed
+        // Enter en el correo pasa el foco a la contraseña
+        txtContrasena.requestFocus();
+    }//GEN-LAST:event_txtCorreoActionPerformed
+
+    private void txtContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtContrasenaActionPerformed
+        // Enter en la contraseña intenta iniciar sesión
+        btnIniciarSesionActionPerformed(evt);
+    }//GEN-LAST:event_txtContrasenaActionPerformed
+
+    private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
+        // Capturamos lo que el usuario escribe
+        String correo = txtCorreo.getText().trim();
+        String password = new String(txtContrasena.getPassword());
+
+        // Validación: campos vacíos
+        if (correo.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar correo y contraseña.", "Campos vacíos", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Validación: formato del correo
+        if (!correo.matches(REGEX_CORREO)) {
+            JOptionPane.showMessageDialog(this, "El correo no tiene un formato válido (ej. usuario@empresa.com).", "Correo inválido", JOptionPane.WARNING_MESSAGE);
+            txtCorreo.requestFocus();
+            return;
+        }
+
+        try {
+            ControladorUsuario controlUsuario = new ControladorUsuario();
+
+            // validarLogin busca al usuario por correo y contraseña (como el login de la universidad)
+            Usuarios usuarioLogueado = controlUsuario.validarLogin(correo, password);
+
+            if (usuarioLogueado != null) {
+                JOptionPane.showMessageDialog(this,
+                        "Bienvenido " + usuarioLogueado.getNombre() + " (" + ControladorUsuario.obtenerRol(usuarioLogueado) + ").",
+                        "Acceso concedido", JOptionPane.INFORMATION_MESSAGE);
+
+                // Conecta el login con el menú principal, enviando el usuario para manejar los permisos por rol
+                FrmMenuPrincipal menu = new FrmMenuPrincipal(usuarioLogueado);
+                menu.setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Correo o contraseña incorrectos.", "Error de acceso", JOptionPane.ERROR_MESSAGE);
+                txtContrasena.setText("");
+                txtContrasena.requestFocus();
+            }
+        } catch (Exception ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Ocurrió un error al iniciar sesión: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -51,7 +166,7 @@ public class FrmLogin extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -70,5 +185,11 @@ public class FrmLogin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnIniciarSesion;
+    private javax.swing.JLabel lblContrasena;
+    private javax.swing.JLabel lblCorreo;
+    private javax.swing.JLabel lblTitulo;
+    private javax.swing.JPasswordField txtContrasena;
+    private javax.swing.JTextField txtCorreo;
     // End of variables declaration//GEN-END:variables
 }

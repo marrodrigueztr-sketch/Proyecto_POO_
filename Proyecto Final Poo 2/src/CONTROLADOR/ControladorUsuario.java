@@ -5,6 +5,8 @@
 package CONTROLADOR;
 import MODELO.Usuarios;
 import MODELO.OperarioBodega;
+import MODELO.AdministradorSistema;
+import MODELO.GerenteGeneral;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -15,10 +17,16 @@ import java.util.List;
 
 public class ControladorUsuario implements ICRUD {
 
-    private ArrayList<Usuarios> listaUsuarios;
+    // static: todas las ventanas (login, menú, formularios) comparten la misma lista
+    private static ArrayList<Usuarios> listaUsuarios = new ArrayList<>();
 
     public ControladorUsuario() {
-        this.listaUsuarios = new ArrayList<>();
+        // Usuarios por defecto para poder ingresar al sistema la primera vez
+        if (listaUsuarios.isEmpty()) {
+            insertar(new AdministradorSistema(1, "Admin", "Sistema", "3000000000", "admin@erp.com", "Administrador", 1, "Admin123*"));
+            insertar(new GerenteGeneral(2, "Carlos", "Ruiz", "3110000000", "gerente@erp.com", "Gerente", 5, "Gerente123*"));
+            insertar(new OperarioBodega(3, "Juan", "Perez", "3004560000", "operario@erp.com", "Operario", 1200.0f, "Diurno", null, "Operario123*"));
+        }
     }
 
     @Override
@@ -134,5 +142,43 @@ public class ControladorUsuario implements ICRUD {
     
     public ArrayList<Usuarios> getListaUsuarios() {
         return this.listaUsuarios;
+    }
+
+    /**
+     * Valida el inicio de sesión buscando un usuario por correo y contraseña.
+     *
+     * @param correo correo ingresado
+     * @param password contraseña ingresada
+     * @return el usuario encontrado, o null si los datos no coinciden
+     */
+    public Usuarios validarLogin(String correo, String password) {
+        for (Usuarios u : listaUsuarios) {
+            if (u.getCorreo() != null && u.getCorreo().equalsIgnoreCase(correo)
+                    && password.equals(obtenerContrasena(u))) {
+                return u;
+            }
+        }
+        return null;
+    }
+
+    /** Devuelve la contraseña según el tipo de usuario (polimorfismo con instanceof). */
+    private String obtenerContrasena(Usuarios u) {
+        if (u instanceof AdministradorSistema a) return a.getContrasena();
+        if (u instanceof GerenteGeneral g) return g.getContrasena();
+        if (u instanceof OperarioBodega o) return o.getContrasena();
+        return null;
+    }
+
+    /**
+     * Nombre del rol de un usuario, usado para mostrar y aplicar permisos.
+     *
+     * @param u usuario
+     * @return "Administrador", "Gerente General" u "Operario de Bodega"
+     */
+    public static String obtenerRol(Usuarios u) {
+        if (u instanceof AdministradorSistema) return "Administrador";
+        if (u instanceof GerenteGeneral) return "Gerente General";
+        if (u instanceof OperarioBodega) return "Operario de Bodega";
+        return "Desconocido";
     }
 }

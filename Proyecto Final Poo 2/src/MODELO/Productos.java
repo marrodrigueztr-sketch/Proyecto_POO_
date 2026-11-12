@@ -19,6 +19,7 @@ public class Productos implements Comparable<Productos> {
     private int stockactual;
     private String proveedor;
     private String tipo; // Reemplaza por completo a la herencia
+    private int idUsuarioRegistro; // id del usuario (operario/admin) que insertó el producto
 
     public Productos(int id, String sku, String nombre, String descripcion, float preciouniitario, int stockactual, String proveedor, String tipo) {
         this.id = id;
@@ -29,6 +30,12 @@ public class Productos implements Comparable<Productos> {
         this.stockactual = stockactual;
         this.proveedor = proveedor;
         this.tipo = tipo;
+    }
+
+    // Constructor sobrecargado: incluye el id de quien registró el producto
+    public Productos(int id, String sku, String nombre, String descripcion, float preciouniitario, int stockactual, String proveedor, String tipo, int idUsuarioRegistro) {
+        this(id, sku, nombre, descripcion, preciouniitario, stockactual, proveedor, tipo);
+        this.idUsuarioRegistro = idUsuarioRegistro;
     }
 
     // Getters y Setters...
@@ -55,6 +62,9 @@ public class Productos implements Comparable<Productos> {
     public String getTipo() { return tipo; }
     public void setTipo(String tipo) { this.tipo = tipo; }
 
+    public int getIdUsuarioRegistro() { return idUsuarioRegistro; }
+    public void setIdUsuarioRegistro(int idUsuarioRegistro) { this.idUsuarioRegistro = idUsuarioRegistro; }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -71,6 +81,7 @@ public class Productos implements Comparable<Productos> {
     @Override
     public String toString() {
         return "ID: " + id + " | SKU: " + sku + " | Nombre: " + nombre + 
-               " | Tipo: " + tipo + " | Stock: " + stockactual + " | Precio: $" + preciouniitario;
+               " | Tipo: " + tipo + " | Stock: " + stockactual + " | Precio: $" + preciouniitario +
+               " | Registrado por: " + idUsuarioRegistro;
     }
 }

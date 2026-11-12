@@ -12,6 +12,7 @@ public class OperarioBodega extends Usuarios {
     private float salario;
     private String turno;
     private Almacen almacenAsignado;
+    private String contrasena;
 
     public OperarioBodega() {}
 
@@ -21,7 +22,21 @@ public class OperarioBodega extends Usuarios {
         this.turno = turno;
         this.almacenAsignado = almacenAsignado;
     }
+
+    // Constructor sobrecargado con contraseña, para que el operario pueda iniciar sesión
+    public OperarioBodega(int id, String nombre, String apellido, String telefono, String correo, String cargo, float salario, String turno, Almacen almacenAsignado, String contrasena) {
+        this(id, nombre, apellido, telefono, correo, cargo, salario, turno, almacenAsignado);
+        this.contrasena = contrasena;
+    }
     // Generar Getters y Setters
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
 
     public float getSalario() {
         return salario;
