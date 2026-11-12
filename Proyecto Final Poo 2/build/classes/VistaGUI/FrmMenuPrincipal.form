@@ -123,6 +123,30 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="itemConsultarAlmacenesActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="itemConsultarZonas">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Consultar Zonas / Pasillos"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="itemConsultarZonasActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="itemConsultarPaises">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Consultar Pa&#xed;ses"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="itemConsultarPaisesActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="itemConsultarCiudades">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Consultar Ciudades"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="itemConsultarCiudadesActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="itemConsultarUsuarios">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Consultar Usuarios"/>

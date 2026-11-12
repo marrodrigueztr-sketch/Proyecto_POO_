@@ -641,6 +641,7 @@ public class FrmProductos extends javax.swing.JFrame {
         }
         //</editor-fold>
 
+        CONTROLADOR.CargadorDatos.cargarTodo();
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new FrmProductos().setVisible(true));
     }

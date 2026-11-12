@@ -77,10 +77,21 @@ public abstract class Usuarios {
     }
     
     @Override
+    public String toString() {
+        return "ID: " + id + " | " + nombre + " " + apellido + " | Tel: " + telefono
+                + " | Correo: " + correo + " | Cargo: " + cargo;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Usuarios usuario = (Usuarios) obj;
-        return Objects.equals(correo, usuario.correo);
+        // instanceof (y no getClass) para que el correo no se repita entre roles distintos
+        if (!(obj instanceof Usuarios usuario)) return false;
+        return correo != null && usuario.correo != null && correo.equalsIgnoreCase(usuario.correo);
+    }
+
+    @Override
+    public int hashCode() {
+        return correo == null ? 0 : correo.toLowerCase().hashCode();
     }
 }

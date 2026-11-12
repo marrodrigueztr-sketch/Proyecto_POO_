@@ -1,0 +1,156 @@
+@startuml ERP_Grupo1
+' Diagrama de clases del ERP (Proyecto POO 2 - Grupo 1)
+' Ver en https://www.plantuml.com/plantuml o con la extensión PlantUML de VS Code / NetBeans.
+' La guía pide entregarlo en ArgoUML o StarUML: usar este archivo como referencia para dibujarlo allí.
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+hide empty members
+
+package MODELO {
+  abstract class Usuarios {
+    - id : int
+    - nombre : String
+    - apellido : String
+    - telefono : String
+    - correo : String
+    - cargo : String
+    + equals(obj : Object) : boolean
+    + toString() : String
+  }
+  class AdministradorSistema {
+    - nivel : int
+    - contrasena : String
+  }
+  class GerenteGeneral {
+    - nivel : int
+    - contrasena : String
+  }
+  class OperarioBodega {
+    - salario : float
+    - turno : String
+    - contrasena : String
+  }
+  class Pais {
+    - id : int
+    - nombre : String
+  }
+  class Ciudad {
+    - id : int
+    - nombre : String
+  }
+  class Almacen {
+    - id : int
+    - nombre : String
+  }
+  class ZonaPasillo {
+    - id : int
+    - codigoArea : String
+    - capacidadMaxima : int
+  }
+  class Productos {
+    - id : int
+    - sku : String
+    - nombre : String
+    - descripcion : String
+    - preciouniitario : float
+    - stockactual : int
+    - proveedor : String
+    - tipo : String
+    - idUsuarioRegistro : int
+    + equals(obj : Object) : boolean
+    + compareTo(otro : Productos) : int
+  }
+  class Movimiento_logistico {
+    - id : int
+    - fecha : String
+    - tipo : String
+    - cantidad : int
+  }
+  interface "Comparable<Productos>" as Comparable
+}
+
+' --- Herencia
+Usuarios <|-- AdministradorSistema
+Usuarios <|-- GerenteGeneral
+Usuarios <|-- OperarioBodega
+Comparable <|.. Productos
+
+' --- Asociación País -> Ciudad -> Almacén -> Zona -> Productos
+Ciudad "*" --> "1" Pais : paisReferencia
+Almacen "*" --> "1" Ciudad : ciudad
+Almacen "*" --> "0..1" GerenteGeneral : gerenteAsignado
+Almacen "1" *-- "*" ZonaPasillo : almacenPertenece\n(composición)
+ZonaPasillo "*" o-- "*" Productos : listaProductos\n(agregación)
+OperarioBodega "*" --> "0..1" Almacen : almacenAsignado
+Movimiento_logistico "*" --> "1" Productos : productoInvolucrado
+Movimiento_logistico "*" --> "1" OperarioBodega : operarioResponsable
+
+package CONTROLADOR {
+  interface ICRUD {
+    + insertar(obj : Object) : boolean
+    + consultarTodos() : void
+    + consultarUno(obj : Object) : Object
+    + ordenar() : void
+    + ordenar(descendente : int) : void
+    + update(obj : Object) : Object
+    + delete(obj : Object) : boolean
+  }
+  class ControladorPais
+  class ControladorCiudad
+  class ControladorAlmacen
+  class ControladorZona
+  class ControladorProductos
+  class ControladorMovimiento
+  class ControladorUsuario {
+    + validarLogin(correo : String, password : String) : Usuarios
+    + {static} obtenerRol(u : Usuarios) : String
+    + {static} puedeEliminar(u : Usuarios) : boolean
+  }
+  class CargadorDatos {
+    + {static} cargarTodo() : void
+  }
+}
+
+ICRUD <|.. ControladorPais
+ICRUD <|.. ControladorCiudad
+ICRUD <|.. ControladorAlmacen
+ICRUD <|.. ControladorZona
+ICRUD <|.. ControladorProductos
+ICRUD <|.. ControladorMovimiento
+ICRUD <|.. ControladorUsuario
+
+package UTILIDADES {
+  class Ordenamientos {
+    + {static} quicksort(lista, criterio) : List
+    + {static} mergesort(lista, criterio) : List
+    + {static} burbuja(lista, criterio) : List
+    + {static} nativo(lista, criterio) : List
+    + {static} busquedaBinaria(lista, id, obtenerId) : T
+  }
+}
+
+package VistaGUI {
+  class FrmLogin
+  class FrmMenuPrincipal
+  class FrmProductos
+  class FrmAlmacenes
+  class FrmZonas
+  class FrmMovimientos
+  class FrmPaises
+  class FrmCiudades
+  class FrmUsuarios
+  class FormUtil
+}
+
+FrmLogin ..> ControladorUsuario : usa
+FrmLogin ..> FrmMenuPrincipal : abre
+FrmMenuPrincipal ..> FrmProductos : abre
+FrmMenuPrincipal ..> FrmAlmacenes : abre
+FrmMenuPrincipal ..> FrmZonas : abre
+FrmMenuPrincipal ..> FrmMovimientos : abre
+FrmMenuPrincipal ..> FrmPaises : abre
+FrmMenuPrincipal ..> FrmCiudades : abre
+FrmMenuPrincipal ..> FrmUsuarios : abre
+ControladorProductos ..> Ordenamientos
+ControladorMovimiento ..> Ordenamientos
+@enduml

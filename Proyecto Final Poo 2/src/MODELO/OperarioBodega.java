@@ -64,7 +64,8 @@ public class OperarioBodega extends Usuarios {
 
     @Override
     public String toString() {
-        return "OperarioBodega{" + "salario=" + salario + ", turno=" + turno + ", almacenAsignado=" + almacenAsignado + '}';
+        String almacen = (almacenAsignado != null) ? almacenAsignado.getNombre() : "Sin asignar";
+        return super.toString() + " OperarioBodega{" + "salario=" + salario + ", turno=" + turno + ", almacenAsignado=" + almacen + '}';
     }
     
 }

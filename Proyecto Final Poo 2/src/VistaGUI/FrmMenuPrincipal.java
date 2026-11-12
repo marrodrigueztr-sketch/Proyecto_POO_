@@ -112,12 +112,6 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         ventana.setVisible(true);
     }
 
-    /** Aviso temporal para las opciones cuyo formulario aún no existe. */
-    private void enConstruccion(String nombre) {
-        JOptionPane.showMessageDialog(this, "El formulario de " + nombre + " aún está en construcción.",
-                "Próximamente", JOptionPane.INFORMATION_MESSAGE);
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -149,6 +143,9 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         itemConsultarMovimientos = new javax.swing.JMenuItem();
         itemConsultarAlmacenes = new javax.swing.JMenuItem();
         itemConsultarUsuarios = new javax.swing.JMenuItem();
+        itemConsultarZonas = new javax.swing.JMenuItem();
+        itemConsultarPaises = new javax.swing.JMenuItem();
+        itemConsultarCiudades = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ERP Corporativo - Menú Principal");
@@ -226,6 +223,18 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         itemConsultarAlmacenes.addActionListener(this::itemConsultarAlmacenesActionPerformed);
         menuConsultas.add(itemConsultarAlmacenes);
 
+        itemConsultarZonas.setText("Consultar Zonas / Pasillos");
+        itemConsultarZonas.addActionListener(this::itemConsultarZonasActionPerformed);
+        menuConsultas.add(itemConsultarZonas);
+
+        itemConsultarPaises.setText("Consultar Países");
+        itemConsultarPaises.addActionListener(this::itemConsultarPaisesActionPerformed);
+        menuConsultas.add(itemConsultarPaises);
+
+        itemConsultarCiudades.setText("Consultar Ciudades");
+        itemConsultarCiudades.addActionListener(this::itemConsultarCiudadesActionPerformed);
+        menuConsultas.add(itemConsultarCiudades);
+
         itemConsultarUsuarios.setText("Consultar Usuarios");
         itemConsultarUsuarios.addActionListener(this::itemConsultarUsuariosActionPerformed);
         menuConsultas.add(itemConsultarUsuarios);
@@ -282,27 +291,27 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_itemGestionProductosActionPerformed
 
     private void itemGestionAlmacenesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemGestionAlmacenesActionPerformed
-        enConstruccion("Almacenes");
+        abrirVentana(new FrmAlmacenes(usuarioLogueado));
     }//GEN-LAST:event_itemGestionAlmacenesActionPerformed
 
     private void itemGestionZonasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemGestionZonasActionPerformed
-        enConstruccion("Zonas / Pasillos");
+        abrirVentana(new FrmZonas(usuarioLogueado));
     }//GEN-LAST:event_itemGestionZonasActionPerformed
 
     private void itemGestionMovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemGestionMovimientosActionPerformed
-        enConstruccion("Movimientos Logísticos");
+        abrirVentana(new FrmMovimientos(usuarioLogueado));
     }//GEN-LAST:event_itemGestionMovimientosActionPerformed
 
     private void itemGestionPaisesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemGestionPaisesActionPerformed
-        enConstruccion("Países");
+        abrirVentana(new FrmPaises(usuarioLogueado));
     }//GEN-LAST:event_itemGestionPaisesActionPerformed
 
     private void itemGestionCiudadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemGestionCiudadesActionPerformed
-        enConstruccion("Ciudades");
+        abrirVentana(new FrmCiudades(usuarioLogueado));
     }//GEN-LAST:event_itemGestionCiudadesActionPerformed
 
     private void itemGestionUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemGestionUsuariosActionPerformed
-        enConstruccion("Usuarios");
+        abrirVentana(new FrmUsuarios(usuarioLogueado));
     }//GEN-LAST:event_itemGestionUsuariosActionPerformed
 
     private void itemConsultarProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemConsultarProductosActionPerformed
@@ -310,16 +319,28 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_itemConsultarProductosActionPerformed
 
     private void itemConsultarMovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemConsultarMovimientosActionPerformed
-        enConstruccion("Consulta de Movimientos Logísticos");
+        abrirVentana(new FrmMovimientos(usuarioLogueado, true)); // modo solo consulta
     }//GEN-LAST:event_itemConsultarMovimientosActionPerformed
 
     private void itemConsultarAlmacenesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemConsultarAlmacenesActionPerformed
-        enConstruccion("Consulta de Almacenes");
+        abrirVentana(new FrmAlmacenes(usuarioLogueado, true)); // modo solo consulta
     }//GEN-LAST:event_itemConsultarAlmacenesActionPerformed
 
     private void itemConsultarUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemConsultarUsuariosActionPerformed
-        enConstruccion("Consulta de Usuarios");
+        abrirVentana(new FrmUsuarios(usuarioLogueado, true)); // modo solo consulta
     }//GEN-LAST:event_itemConsultarUsuariosActionPerformed
+
+    private void itemConsultarZonasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemConsultarZonasActionPerformed
+        abrirVentana(new FrmZonas(usuarioLogueado, true)); // modo solo consulta
+    }//GEN-LAST:event_itemConsultarZonasActionPerformed
+
+    private void itemConsultarPaisesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemConsultarPaisesActionPerformed
+        abrirVentana(new FrmPaises(usuarioLogueado, true)); // modo solo consulta
+    }//GEN-LAST:event_itemConsultarPaisesActionPerformed
+
+    private void itemConsultarCiudadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemConsultarCiudadesActionPerformed
+        abrirVentana(new FrmCiudades(usuarioLogueado, true)); // modo solo consulta
+    }//GEN-LAST:event_itemConsultarCiudadesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -349,9 +370,12 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem itemCerrarSesion;
     private javax.swing.JMenuItem itemConsultarAlmacenes;
+    private javax.swing.JMenuItem itemConsultarCiudades;
     private javax.swing.JMenuItem itemConsultarMovimientos;
+    private javax.swing.JMenuItem itemConsultarPaises;
     private javax.swing.JMenuItem itemConsultarProductos;
     private javax.swing.JMenuItem itemConsultarUsuarios;
+    private javax.swing.JMenuItem itemConsultarZonas;
     private javax.swing.JMenuItem itemGestionAlmacenes;
     private javax.swing.JMenuItem itemGestionCiudades;
     private javax.swing.JMenuItem itemGestionMovimientos;

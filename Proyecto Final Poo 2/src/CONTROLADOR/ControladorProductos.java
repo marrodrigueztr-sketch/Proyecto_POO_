@@ -6,8 +6,6 @@ package CONTROLADOR;
 import java.util.ArrayList;
 import MODELO.Productos;
 import MODELO.Usuarios;
-import MODELO.OperarioBodega;
-import MODELO.GerenteGeneral;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,14 +19,6 @@ public class ControladorProductos implements ICRUD {
     private static ArrayList<Productos> listaProductos = new ArrayList<>();
 
     public ControladorProductos() {
-        // Productos de ejemplo para poder probar consultas y ordenamientos
-        if (listaProductos.isEmpty()) {
-            insertar(new Productos(5, "ELT-4012", "Televisor 50 pulgadas", "Smart TV 4K", 1800000f, 12, "Samsung", "Electrónico", 3));
-            insertar(new Productos(2, "PER-1001", "Leche entera", "Caja x 1 litro", 4500f, 200, "Alpina", "Perecedero", 3));
-            insertar(new Productos(8, "FRA-2005", "Vajilla de vidrio", "Juego de 12 piezas", 95000f, 30, "Corona", "Frágil", 1));
-            insertar(new Productos(1, "ELT-3300", "Audífonos bluetooth", "Inalámbricos", 120000f, 45, "Sony", "Electrónico", 3));
-            insertar(new Productos(4, "PER-1500", "Queso campesino", "Bloque de 500 g", 12000f, 8, "Colanta", "Perecedero", 1));
-        }
     }
 
     @Override
@@ -150,6 +140,12 @@ public class ControladorProductos implements ICRUD {
         Productos p = (Productos) consultarUno(obj);
         
         if (p != null) {
+            // Dependencias: se quita de las zonas y se eliminan sus movimientos
+            for (MODELO.ZonaPasillo z : new ControladorZona().getListaZonas()) {
+                z.getListaProductos().remove(p);
+            }
+            new ControladorMovimiento().getListaMovimientos().removeIf(
+                    m -> m.getProductoInvolucrado() != null && m.getProductoInvolucrado().getId() == p.getId());
             listaProductos.remove(p);
             return true;
         }
@@ -161,8 +157,8 @@ public class ControladorProductos implements ICRUD {
 
     // Método sobrecargado para aplicar las reglas de negocio por rol
     public boolean delete(Object obj, Usuarios usuarioEjecutor) {
-        if (usuarioEjecutor instanceof OperarioBodega || usuarioEjecutor instanceof GerenteGeneral) {
-            return false; // Operario y Gerente no pueden eliminar
+        if (!ControladorUsuario.puedeEliminar(usuarioEjecutor)) {
+            return false; // Solo el administrador puede eliminar
         }
         return this.delete(obj);
     }

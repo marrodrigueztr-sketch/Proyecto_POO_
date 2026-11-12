@@ -74,6 +74,11 @@ public class Productos implements Comparable<Productos> {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hashCode(sku);
+    }
+
+    @Override
     public int compareTo(Productos otro) {
         return Integer.compare(this.id, otro.id);
     }
